@@ -40,6 +40,7 @@ enum LedColor {
   LED_COLOR_RED = 0xff0000,
   LED_COLOR_GREEN = 0x00ff00,
   LED_COLOR_YELLOW = 0xffff00,
+  LED_COLOR_MIX = 0xaaff00,
 };
 
 class Leds {
