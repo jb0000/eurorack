@@ -137,7 +137,7 @@ void Ui::UpdateLEDs() {
         LedColor green = settings_->state().color_blind == 1
             ? LED_COLOR_YELLOW
             : LED_COLOR_GREEN;
-        LedColor mix = LED_COLOR_MIX //TODO: needs a colorblind modes
+        LedColor mix = LED_COLOR_MIX; //TODO: needs a colorblind modes
         leds_.set(
             active_engine_ & 7,
             active_engine_ & 8 ? red : active_engine_ & 16 ? mix : green);
