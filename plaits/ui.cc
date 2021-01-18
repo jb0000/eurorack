@@ -283,21 +283,17 @@ void Ui::ReadSwitches() {
         
         if (switches_.released(Switch(0)) && !ignore_release_[0]) {
           RealignPots();
-          if (patch_->engine >= 8) {
+          if (patch_->engine >= 16) {
             patch_->engine = patch_->engine & 7;
           } else {
-            patch_->engine = (patch_->engine + 1) % 8;
+            patch_->engine = 8 + patch_->engine;
           }
           SaveState();
         }
   
         if (switches_.released(Switch(1)) && !ignore_release_[1]) {
           RealignPots();
-          if (patch_->engine < 8) {
-            patch_->engine = (patch_->engine & 7) + 8;
-          } else {
-            patch_->engine = 8 + ((patch_->engine + 1) % 8);
-          }
+          patch_->engine = ((patch_->engine >> 3) * 8) + ((patch_->engine + 1) % 8);
           SaveState();
         }
       }
