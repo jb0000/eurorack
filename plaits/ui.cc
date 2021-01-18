@@ -137,14 +137,16 @@ void Ui::UpdateLEDs() {
         LedColor green = settings_->state().color_blind == 1
             ? LED_COLOR_YELLOW
             : LED_COLOR_GREEN;
-        LedColor mix = LED_COLOR_MIX; //TODO: needs a colorblind modes
+        LedColor yellow = settings_->state().color_blind == 1
+            ? ((pwm_Counter & 4) ? LED_COLOR_OFF : LED_COLOR_YELLOW)
+            : LED_COLOR_YELLOW
         leds_.set(
             active_engine_ & 7,
-            active_engine_ & 8 ? red : active_engine_ & 16 ? mix : green);
+            active_engine_ & 8 ? red : active_engine_ & 16 ? yellow : green);
         if (pwm_counter < triangle) {
           leds_.mask(
               patch_->engine & 7,
-              patch_->engine & 8 ? red : patch_->engine & 16 ? mix : green);
+              patch_->engine & 8 ? red : patch_->engine & 16 ? yellow : green);
         }
       }
       break;
