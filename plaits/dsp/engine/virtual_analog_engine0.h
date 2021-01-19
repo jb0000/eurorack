@@ -26,8 +26,8 @@
 //
 // 2 variable shape oscillators with sync and crossfading.
 
-#ifndef PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE_H_
-#define PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE_H_
+#ifndef PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE0_H_
+#define PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE0_H_
 
 #include "plaits/dsp/engine/engine.h"
 #include "plaits/dsp/engine/virtual_analog_engine.h"
@@ -47,6 +47,7 @@ class VirtualAnalogEngine0 : public VirtualAnalogEngine {
       size_t size,
       bool* already_enveloped);
 
+    DISALLOW_COPY_AND_ASSIGN(VirtualAnalogEngine0);
 }  // namespace plaits
 
-#endif  // PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE_H_
+#endif  // PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE0_H_
