@@ -285,7 +285,7 @@ void Ui::ReadSwitches() {
         
         if (switches_.released(Switch(0)) && !ignore_release_[0]) {
           RealignPots();
-          if (patch_->engine >= 16) {
+          if (patch_->engine >= 16) { // kMaxEngines - 8
             patch_->engine = patch_->engine & 7;
           } else {
             patch_->engine = 8 + patch_->engine;
