@@ -48,6 +48,7 @@ class VirtualAnalogEngine0 : public VirtualAnalogEngine {
       bool* already_enveloped);
 
     DISALLOW_COPY_AND_ASSIGN(VirtualAnalogEngine0);
+  };
 }  // namespace plaits
 
 #endif  // PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE0_H_
