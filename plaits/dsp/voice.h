@@ -50,6 +50,7 @@
 #include "plaits/dsp/engine/string_engine.h"
 #include "plaits/dsp/engine/swarm_engine.h"
 #include "plaits/dsp/engine/virtual_analog_engine.h"
+#include "plaits/dsp/engine/virtual_analog_engine0.h"
 #include "plaits/dsp/engine/waveshaping_engine.h"
 #include "plaits/dsp/engine/wavetable_engine.h"
 
@@ -203,6 +204,7 @@ class Voice {
   StringEngine string_engine_;
   SwarmEngine swarm_engine_;
   VirtualAnalogEngine virtual_analog_engine_;
+  VirtualAnalogEngine0 virtual_analog_engine0_;
   WaveshapingEngine waveshaping_engine_;
   WavetableEngine wavetable_engine_;
 

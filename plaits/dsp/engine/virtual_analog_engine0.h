@@ -30,41 +30,22 @@
 #define PLAITS_DSP_ENGINE_VIRTUAL_ANALOG_ENGINE_H_
 
 #include "plaits/dsp/engine/engine.h"
+#include "plaits/dsp/engine/virtual_analog_engine.h"
 #include "plaits/dsp/oscillator/variable_saw_oscillator.h"
 #include "plaits/dsp/oscillator/variable_shape_oscillator.h"
 
-#define VA_VARIANT 2
-
 namespace plaits {
   
-class VirtualAnalogEngine : public Engine {
+class VirtualAnalogEngine0 : public VirtualAnalogEngine {
  public:
-  VirtualAnalogEngine() { }
-  ~VirtualAnalogEngine() { }
-  
-  virtual void Init(stmlib::BufferAllocator* allocator);
-  virtual void Reset();
+  VirtualAnalogEngine0() { }
+  ~VirtualAnalogEngine0() { }
+
   virtual void Render(const EngineParameters& parameters,
       float* out,
       float* aux,
       size_t size,
       bool* already_enveloped);
-  
- protected:
-  float ComputeDetuning(float detune) const;
-  
-  VariableShapeOscillator primary_;
-  VariableShapeOscillator auxiliary_;
-
-  VariableShapeOscillator sync_;
-  VariableSawOscillator variable_saw_;
-
-  float auxiliary_amount_;
-  float xmod_amount_;
-  float* temp_buffer_;
-  
-  DISALLOW_COPY_AND_ASSIGN(VirtualAnalogEngine);
-};
 
 }  // namespace plaits
 
