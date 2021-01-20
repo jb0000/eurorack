@@ -49,6 +49,7 @@
 #include "plaits/dsp/engine/speech_engine.h"
 #include "plaits/dsp/engine/string_engine.h"
 #include "plaits/dsp/engine/swarm_engine.h"
+#include "plaits/dsp/engine/super_oscillator_engine.h"
 #include "plaits/dsp/engine/virtual_analog_engine.h"
 #include "plaits/dsp/engine/waveshaping_engine.h"
 #include "plaits/dsp/engine/wavetable_engine.h"
@@ -202,6 +203,7 @@ class Voice {
   SpeechEngine speech_engine_;
   StringEngine string_engine_;
   SwarmEngine swarm_engine_;
+  SuperOscillatorEngine super_oscillator_engine_;
   VirtualAnalogEngine virtual_analog_engine_;
   WaveshapingEngine waveshaping_engine_;
   WavetableEngine wavetable_engine_;
