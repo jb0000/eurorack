@@ -36,6 +36,7 @@
 #include "stmlib/dsp/polyblep.h"
 
 #include <algorithm>
+#include "plaits/dsp/oscillator/oscillator.h"
 
 namespace plaits {
 
