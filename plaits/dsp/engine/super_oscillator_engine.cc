@@ -64,7 +64,7 @@ void SuperOscillatorEngine::Render(
   CONSTRAIN(shape, 0.0f, 1.0f);
 
   float pw = parameters.timbre;
-  CONSTRAIN(pw, 0f, 1.0f);
+  CONSTRAIN(pw, 0.0f, 1.0f);
   
   primary_.Render<false>(
       primary_f, primary_f, pw, shape, out, size);
