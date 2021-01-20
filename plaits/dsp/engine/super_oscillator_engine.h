@@ -36,8 +36,8 @@ namespace plaits {
   
 class SuperOscillator : public Engine {
  public:
-  SuperOscillator() { }
-  ~SuperOscillator() { }
+  SuperOscillatorEngine() { }
+  ~SuperOscillatorEngine() { }
   
   virtual void Init(stmlib::BufferAllocator* allocator);
   virtual void Reset();
@@ -52,7 +52,7 @@ class SuperOscillator : public Engine {
 
   float* temp_buffer_;
   
-  DISALLOW_COPY_AND_ASSIGN(SuperOscillator);
+  DISALLOW_COPY_AND_ASSIGN(SuperOscillatorEngine);
 };
 
 }  // namespace plaits
