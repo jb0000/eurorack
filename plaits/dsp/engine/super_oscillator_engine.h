@@ -34,7 +34,7 @@
 
 namespace plaits {
   
-class SuperOscillator : public Engine {
+class SuperOscillatorEngine : public Engine {
  public:
   SuperOscillatorEngine() { }
   ~SuperOscillatorEngine() { }
