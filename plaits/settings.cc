@@ -78,7 +78,7 @@ bool Settings::Init() {
   
   bool success = chunk_storage_.Init(&persistent_data_, &state_);
   
-  CONSTRAIN(state_.engine, 0, 15);
+  CONSTRAIN(state_.engine, 0, 23);
 
   return success;
 }
