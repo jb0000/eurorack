@@ -137,13 +137,16 @@ void Ui::UpdateLEDs() {
         LedColor green = settings_->state().color_blind == 1
             ? LED_COLOR_YELLOW
             : LED_COLOR_GREEN;
+        LedColor yellow = settings_->state().color_blind == 1
+            ? ((pwm_counter < triangle) ? LED_COLOR_OFF : LED_COLOR_YELLOW)
+            : LED_COLOR_YELLOW;
         leds_.set(
             active_engine_ & 7,
-            active_engine_ & 8 ? red : green);
+            active_engine_ & 8 ? red : active_engine_ & 16 ? yellow : green);
         if (pwm_counter < triangle) {
           leds_.mask(
               patch_->engine & 7,
-              patch_->engine & 8 ? red : green);
+              patch_->engine & 8 ? red : patch_->engine & 16 ? yellow : green);
         }
       }
       break;
@@ -282,21 +285,17 @@ void Ui::ReadSwitches() {
         
         if (switches_.released(Switch(0)) && !ignore_release_[0]) {
           RealignPots();
-          if (patch_->engine >= 8) {
+          if (patch_->engine >= 16) { // kMaxEngines - 8
             patch_->engine = patch_->engine & 7;
           } else {
-            patch_->engine = (patch_->engine + 1) % 8;
+            patch_->engine = 8 + patch_->engine;
           }
           SaveState();
         }
   
         if (switches_.released(Switch(1)) && !ignore_release_[1]) {
           RealignPots();
-          if (patch_->engine < 8) {
-            patch_->engine = (patch_->engine & 7) + 8;
-          } else {
-            patch_->engine = 8 + ((patch_->engine + 1) % 8);
-          }
+          patch_->engine = ((patch_->engine >> 3) * 8) + ((patch_->engine + 1) % 8);
           SaveState();
         }
       }
