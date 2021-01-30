@@ -138,11 +138,7 @@ void Ui::UpdateLEDs() {
             ? LED_COLOR_YELLOW
             : LED_COLOR_GREEN;
         LedColor yellow = settings_->state().color_blind == 1
-<<<<<<< HEAD
-            ? ((pwm_counter & 15) ? LED_COLOR_OFF : LED_COLOR_YELLOW)
-=======
             ? ((pwm_counter < triangle) ? LED_COLOR_OFF : LED_COLOR_YELLOW)
->>>>>>> origin/colours
             : LED_COLOR_YELLOW;
         leds_.set(
             active_engine_ & 7,
