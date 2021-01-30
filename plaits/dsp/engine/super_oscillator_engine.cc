@@ -38,8 +38,10 @@ using namespace std;
 using namespace stmlib;
 
 void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
-  primary_.Init();
-
+  for (int i = 0; i < 7; ++i) {
+    float rank = (static_cast<float>(i) - 3.0) / 3.0;
+    super_voice_[i].Init(rank);
+  }
   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
 }
 
@@ -54,11 +56,7 @@ void SuperOscillatorEngine::Render(
     size_t size,
     bool* already_enveloped) {
 
-  // 1 = variable waveshape controlled by TIMBRE.
-  // 2 = variable waveshape controlled by MORPH, detuned by HARMONICS.
-  // OUT = 1 + 2.
-  // AUX = 1 + sync 2.
-  const float primary_f = NoteToFrequency(parameters.note);
+  const float f0 = NoteToFrequency(parameters.note);
 
   float shape = parameters.morph;
   CONSTRAIN(shape, 0.0f, 1.0f);
@@ -66,9 +64,23 @@ void SuperOscillatorEngine::Render(
   float pw = parameters.timbre;
   CONSTRAIN(pw, 0.0f, 1.0f);
   
-  primary_.Render<false>(
-      primary_f, primary_f, pw, shape, out, size);
-  
+  const float spread = parameters.harmonics * parameters.harmonics * \
+      parameters.harmonics;
+  fill(&out[0], &out[size], 0.0f);
+  for (int i = 0; i < 7; ++i) {
+    super_voice_[i].Render(
+        f0,
+        shape,
+        pw,
+        spread,
+        size,
+        temp_buffer_
+    );
+    for (size_t i = 0; i < size; ++i) {
+      out[i] += temp_buffer_[i] * 0.14f;
+    }
+  }
+
 }
 
 }  // namespace plaits

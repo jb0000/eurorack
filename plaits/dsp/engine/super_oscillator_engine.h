@@ -34,6 +34,38 @@
 
 namespace plaits {
   
+class SuperVoice {
+ public:
+  SuperVoice() { }
+  ~SuperVoice() { }
+
+  void Init(float rank) {
+    rank_ = rank;
+    var_osc_.Init();
+  }
+
+  void Render(
+        float f0,
+        float shape,
+        float pw,
+        float spread,
+        size_t size,
+        float* out
+      ) {
+
+    const float linear_amount = rank_ * (rank_ + 0.01f) * spread * 0.25f;
+    f0 *= 1.0f + linear_amount;
+
+    var_osc_.Render<false>(
+      f0, f0, pw, shape, out, size);
+  };
+
+ private:
+  float rank_;
+
+  VariableShapeOscillator var_osc_;
+};
+
 class SuperOscillatorEngine : public Engine {
  public:
   SuperOscillatorEngine() { }
@@ -48,8 +80,7 @@ class SuperOscillatorEngine : public Engine {
       bool* already_enveloped);
   
  private:
-  VariableShapeOscillator primary_;
-
+  SuperVoice super_voice_[7];
   float* temp_buffer_;
   
   DISALLOW_COPY_AND_ASSIGN(SuperOscillatorEngine);
