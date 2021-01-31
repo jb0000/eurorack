@@ -81,6 +81,7 @@ class SuperOscillatorEngine : public Engine {
   
  private:
   SuperVoice super_voice_[7];
+  SuperVoice super_voice_aux[7];
   float* temp_buffer_;
   
   DISALLOW_COPY_AND_ASSIGN(SuperOscillatorEngine);
