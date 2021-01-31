@@ -64,8 +64,10 @@ void SuperOscillatorEngine::Render(
   float pw = parameters.timbre;
   CONSTRAIN(pw, 0.0f, 1.0f);
   
-  const float spread = parameters.harmonics * parameters.harmonics * \
-      parameters.harmonics;
+  const float spread = parameters.harmonics * parameters.harmonics;
+
+  const float amplitude = 0.14f * (1.2f - (parameters.morph * 0.2f)) * (1.0f + spread * 0.2f);
+
   fill(&out[0], &out[size], 0.0f);
   for (int i = 0; i < 7; ++i) {
     super_voice_[i].Render(
@@ -77,7 +79,7 @@ void SuperOscillatorEngine::Render(
         temp_buffer_
     );
     for (size_t i = 0; i < size; ++i) {
-      out[i] += temp_buffer_[i] * 0.14f;
+      out[i] += temp_buffer_[i] * amplitude;
     }
   }
 
