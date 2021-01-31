@@ -41,8 +41,10 @@ void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
   for (int i = 0; i < 7; ++i) {
     float rank = (static_cast<float>(i) - 3.0) / 3.0;
     super_voice_[i].Init(rank);
-    rank = (static_cast<float>(i) - 2.5) / 3.0;
-    super_voice_aux[i].Init(rank);
+  }
+  for(int j = 0; j < 7; ++j){
+    float rank = (static_cast<float>(j) - 2.5) / 3.0;
+    super_voice_aux[j].Init(rank);
   }
 
   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
