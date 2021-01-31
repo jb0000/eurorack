@@ -61,10 +61,11 @@ void SuperOscillatorEngine::Render(
   float shape = parameters.morph;
   CONSTRAIN(shape, 0.0f, 1.0f);
 
-  float pw = parameters.timbre;
+  float pw = parameters.timbre * 0.5f;
+  pw = shape > 0.5 ? 0.5f + pw : 0.5f - pw;
   CONSTRAIN(pw, 0.0f, 1.0f);
   
-  const float spread = parameters.harmonics * parameters.harmonics;
+  const float spread = parameters.harmonics * parameters.harmonics * 0.7f;
 
   const float amplitude = 0.14f * (1.2f - (parameters.morph * 0.2f)) * (1.0f + spread * 0.2f);
 
