@@ -38,13 +38,9 @@ using namespace std;
 using namespace stmlib;
 
 void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
-  for (int i = 0; i < 7; ++i) {
-    float rank = (static_cast<float>(i) - 3.0) / 3.0;
+  for (int i = 0; i < 14; ++i) {
+    float rank = (static_cast<float>(i) * 0.5 - 3.0) / 3.0;
     super_voice_[i].Init(rank);
-  }
-  for(int j = 0; j < 7; ++j){
-    float rank = (static_cast<float>(j) - 2.5) / 3.0;
-    super_voice_aux[j].Init(rank);
   }
 
   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
@@ -76,7 +72,7 @@ void SuperOscillatorEngine::Render(
 
   fill(&out[0], &out[size], 0.0f);
   fill(&aux[0], &aux[size], 0.0f);
-  for (int i = 0; i < 7; ++i) {
+  for (int i = 0; i < 14; ++i) {
     super_voice_[i].Render(
         f0,
         shape,
@@ -85,19 +81,14 @@ void SuperOscillatorEngine::Render(
         size,
         temp_buffer_
     );
-    for (size_t j = 0; j < size; ++j) {
-      out[j] += temp_buffer_[j] * amplitude;
-    }
-    super_voice_aux[i].Render(
-        f0,
-        shape,
-        pw,
-        spread,
-        size,
-        temp_buffer_
-    );
-    for (size_t j = 0; j < size; ++j) {
-      aux[j] += temp_buffer_[j] * amplitude;
+    if((i & 1) == 0){
+      for (size_t j = 0; j < size; ++j) {
+        out[j] += temp_buffer_[j] * amplitude;
+      }
+    }else{
+      for (size_t j = 0; j < size; ++j) {
+        aux[j] += temp_buffer_[j] * amplitude;
+      }
     }
   }
 
