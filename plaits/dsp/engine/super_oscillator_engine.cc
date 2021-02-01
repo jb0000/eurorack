@@ -37,10 +37,24 @@ namespace plaits {
 using namespace std;
 using namespace stmlib;
 
+const float ranks[14] = {
+    -1.0,
+    -0.8,
+    -0.6,
+    -0.4,
+    -0.2,
+    -0.1,
+    0,
+    0.1,
+    0.2,
+    0.4,
+    0.6,
+    0.8,
+    1.0,
+};
 void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
   for (int i = 0; i < 14; ++i) {
-    float rank = (static_cast<float>(i) * 0.5 - 3.0) / 3.0;
-    super_voice_[i].Init(rank);
+    super_voice_[i].Init(ranks[i]);
   }
 
   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
@@ -81,12 +95,10 @@ void SuperOscillatorEngine::Render(
         size,
         temp_buffer_
     );
-    if((i & 1) == 0){
       for (size_t j = 0; j < size; ++j) {
+        if((i & 1) == 0){
         out[j] += temp_buffer_[j] * amplitude;
-      }
-    }else{
-      for (size_t j = 0; j < size; ++j) {
+      } else {
         aux[j] += temp_buffer_[j] * amplitude;
       }
     }
