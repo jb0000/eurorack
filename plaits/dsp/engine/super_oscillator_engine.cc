@@ -95,10 +95,12 @@ void SuperOscillatorEngine::Render(
         size,
         temp_buffer_
     );
+    if((i & 1) == 0){
       for (size_t j = 0; j < size; ++j) {
-        if((i & 1) == 0){
         out[j] += temp_buffer_[j] * amplitude;
-      } else {
+      }
+    } else {
+      for (size_t j = 0; j < size; ++j) {
         aux[j] += temp_buffer_[j] * amplitude;
       }
     }
