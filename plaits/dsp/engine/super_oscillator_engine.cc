@@ -85,25 +85,17 @@ void SuperOscillatorEngine::Render(
   const float amplitude = 0.14f * (1.2f - (parameters.morph * 0.2f)) * (1.0f + spread * 0.2f);
 
   fill(&out[0], &out[size], 0.0f);
-  fill(&aux[0], &aux[size], 0.0f);
-  for (int i = 0; i < 14; ++i) {
+  //fill(&aux[0], &aux[size], 0.0f);
+  for (int i = 0; i < 9; ++i) {
     super_voice_[i].Render(
         f0,
+        amplitude,
         shape,
         pw,
         spread,
         size,
-        temp_buffer_
+        out
     );
-    if((i & 1) == 0){
-      for (size_t j = 0; j < size; ++j) {
-        out[j] += temp_buffer_[j] * amplitude;
-      }
-    } else {
-      for (size_t j = 0; j < size; ++j) {
-        aux[j] += temp_buffer_[j] * amplitude;
-      }
-    }
   }
 
 }

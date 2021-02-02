@@ -46,6 +46,7 @@ class SuperVoice {
 
   void Render(
         float f0,
+        float amplitude,
         float shape,
         float pw,
         float spread,
@@ -57,7 +58,7 @@ class SuperVoice {
     f0 *= 1.0f + linear_amount;
 
     var_osc_.Render<false>(
-      f0, f0, pw, shape, out, size);
+      f0, f0, amplitude, pw, shape, out, size);
   };
 
  private:

@@ -62,6 +62,7 @@ class VariableShapeOscillator {
   void Render(
       float master_frequency,
       float frequency,
+      float amplitude,
       float pw,
       float waveshape,
       float* out,
@@ -181,7 +182,7 @@ class VariableShapeOscillator {
           square_amount);
       previous_pw_ = pw;
 
-      *out++ = (2.0f * this_sample - 1.0f);
+      *out++ += (2.0f * this_sample - 1.0f) * amplitude;
     }
     
     next_sample_ = next_sample;
