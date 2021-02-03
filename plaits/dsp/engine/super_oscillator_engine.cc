@@ -41,6 +41,7 @@ void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
   for (int i = 0; i < 7; ++i) {
     float rank = (static_cast<float>(i) - 3.0) / 3.0;
     super_voice_[i].Init(rank);
+    phase_buffer_[i] = allocator->Allocate<float>(kMaxBlockSize);
   }
   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
 }
@@ -70,17 +71,21 @@ void SuperOscillatorEngine::Render(
   const float amplitude = 0.14f * (1.2f - (parameters.morph * 0.2f)) * (1.0f + spread * 0.2f);
 
   fill(&out[0], &out[size], 0.0f);
+  fill(&aux[0], &aux[size], 0.0f);
   for (int i = 0; i < 7; ++i) {
+    for (size_t j = 0; j < size; ++j) {
+      aux[j] += phase_buffer_[i][j] * amplitude;
+    }
     super_voice_[i].Render(
         f0,
         shape,
         pw,
         spread,
         size,
-        temp_buffer_
+        phase_buffer_[i]
     );
-    for (size_t i = 0; i < size; ++i) {
-      out[i] += temp_buffer_[i] * amplitude;
+    for (size_t j = 0; j < size; ++j) {
+      out[j] += phase_buffer_[i][j] * amplitude;
     }
   }
 
