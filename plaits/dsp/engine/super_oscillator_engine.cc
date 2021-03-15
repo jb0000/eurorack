@@ -41,9 +41,10 @@ void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
   for (int i = 0; i < 7; ++i) {
     float rank = (static_cast<float>(i) - 3.0) / 3.0;
     super_voice_[i].Init(rank);
-    phase_buffer_[i] = allocator->Allocate<float>(kMaxBlockSize);
+    phase_buffer_[i] = allocator->Allocate<float>(kMaxBlockSize*4);
   }
   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
+  rotatingIndex = 0;
 }
 
 void SuperOscillatorEngine::Reset() {
@@ -62,10 +63,10 @@ void SuperOscillatorEngine::Render(
   float shape = parameters.morph;
   CONSTRAIN(shape, 0.0f, 1.0f);
 
-  float pw = parameters.timbre * 0.5f;
-  pw = shape > 0.5 ? 0.5f + pw : 0.5f - pw;
-  CONSTRAIN(pw, 0.0f, 1.0f);
-  
+  //float pw = parameters.timbre * 0.5f;
+  //pw = shape > 0.5 ? 0.5f + pw : 0.5f - pw;
+  //CONSTRAIN(pw, 0.0f, 1.0f);
+  const int timbre_scaled = static_cast<int>(parameters.timbre * 4 * size);
   const float spread = parameters.harmonics * parameters.harmonics * 0.7f;
 
   const float amplitude = 0.14f * (1.2f - (parameters.morph * 0.2f)) * (1.0f + spread * 0.2f);
@@ -73,22 +74,22 @@ void SuperOscillatorEngine::Render(
   fill(&out[0], &out[size], 0.0f);
   fill(&aux[0], &aux[size], 0.0f);
   for (int i = 0; i < 7; ++i) {
-    for (size_t j = 0; j < size; ++j) {
-      aux[j] += phase_buffer_[i][j] * amplitude;
-    }
     super_voice_[i].Render(
         f0,
         shape,
-        pw,
+        0.5f,
         spread,
         size,
-        phase_buffer_[i]
+        &phase_buffer_[i][rotatingIndex]
     );
-    for (size_t j = 0; j < size; ++j) {
+    for (size_t j = rotatingIndex; j < size + rotatingIndex; ++j) {
+      int phasedIndex = j - timbre_scaled;
+      if(phasedIndex < 0 ){ phasedIndex = 4 * size - phasedIndex;}
       out[j] += phase_buffer_[i][j] * amplitude;
+      aux[j] += phase_buffer_[i][phasedIndex] * amplitude;
     }
   }
-
+  rotatingIndex = (rotatingIndex + size) & (4 * size);
 }
 
 }  // namespace plaits

@@ -83,6 +83,7 @@ class SuperOscillatorEngine : public Engine {
   SuperVoice super_voice_[7];
   float* temp_buffer_;
   float* phase_buffer_[7];
+  int rotatingIndex;
   
   DISALLOW_COPY_AND_ASSIGN(SuperOscillatorEngine);
 };
