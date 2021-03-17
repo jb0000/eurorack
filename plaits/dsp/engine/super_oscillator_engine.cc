@@ -58,6 +58,7 @@ void SuperOscillatorEngine::Render(
     size_t size,
     bool* already_enveloped) {
 
+  const size_t max_buffer_index_ = (4 * size) - 1; //47
   const float f0 = NoteToFrequency(parameters.note);
 
   float shape = parameters.morph;
@@ -66,13 +67,16 @@ void SuperOscillatorEngine::Render(
   //float pw = parameters.timbre * 0.5f;
   //pw = shape > 0.5 ? 0.5f + pw : 0.5f - pw;
   //CONSTRAIN(pw, 0.0f, 1.0f);
-  const int timbre_scaled = static_cast<int>(parameters.timbre * 4 * size);
+  const int timbre_scaled = static_cast<int>(parameters.timbre * max_buffer_index_);
   const float spread = parameters.harmonics * parameters.harmonics * 0.7f;
 
   const float amplitude = 0.14f * (1.2f - (parameters.morph * 0.2f)) * (1.0f + spread * 0.2f);
 
   fill(&out[0], &out[size], 0.0f);
   fill(&aux[0], &aux[size], 0.0f);
+
+  const int phasedIndex = rotatingIndex - timbre_scaled < 0 ? max_buffer_index_ + rotatingIndex - timbre_scaled : rotatingIndex - timbre_scaled;
+
   for (int i = 0; i < 7; ++i) {
     super_voice_[i].Render(
         f0,
@@ -82,14 +86,17 @@ void SuperOscillatorEngine::Render(
         size,
         &phase_buffer_[i][rotatingIndex]
     );
-    for (size_t j = rotatingIndex; j < size + rotatingIndex; ++j) {
-      int phasedIndex = j - timbre_scaled;
-      if(phasedIndex < 0 ){ phasedIndex = 4 * size - phasedIndex;}
-      out[j] += phase_buffer_[i][j] * amplitude;
-      aux[j] += phase_buffer_[i][phasedIndex] * amplitude;
+    size_t k = phasedIndex;
+    size_t j = rotatingIndex;
+    for (size_t n = 0; n < size; ++n) {
+      if(k > max_buffer_index_) k = 0;
+      out[n] += phase_buffer_[i][j] * amplitude;
+      aux[n] += phase_buffer_[i][k] * amplitude;
+      j++;
+      k++;
     }
   }
-  rotatingIndex = (rotatingIndex + size) & (4 * size);
+  rotatingIndex = rotatingIndex + 2 * size > max_buffer_index_ ? 0 : rotatingIndex + size;
 }
 
 }  // namespace plaits
