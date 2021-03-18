@@ -36,14 +36,15 @@ namespace plaits {
 
 using namespace std;
 using namespace stmlib;
-
+#pragma GCC push_options
+#pragma GCC optimize "-Os"
 void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
   for (int i = 0; i < 7; ++i) {
     float rank = (static_cast<float>(i) - 3.0) / 3.0;
     super_voice_[i].Init(rank);
     phase_buffer_[i] = allocator->Allocate<float>(kMaxBlockSize*4);
   }
-  temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
+  //temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
   rotatingIndex = 0;
 }
 
@@ -61,16 +62,15 @@ void SuperOscillatorEngine::Render(
   const size_t buffer_size_ = (4 * size);
   const float f0 = NoteToFrequency(parameters.note);
 
-  float shape = parameters.morph;
-  CONSTRAIN(shape, 0.0f, 1.0f);
+  const float shape = (parameters.morph - 0.375f) * 1.6f;
+  const float pw = 0.5f + parameters.morph > 0.625 ? (parameters.morph - 0.625) * 2.6f: 0;
+  //CONSTRAIN(shape, 0.0f, 1.0f);
+  //CONSTRAIN(pw, 0.5f, 1.0f);
 
-  //float pw = parameters.timbre * 0.5f;
-  //pw = shape > 0.5 ? 0.5f + pw : 0.5f - pw;
-  //CONSTRAIN(pw, 0.0f, 1.0f);
-  const int timbre_scaled = static_cast<int>(parameters.timbre * buffer_size_);
+  const int timbre_scaled = static_cast<int>(parameters.timbre * (buffer_size_ - 3));
   const float spread = parameters.harmonics * parameters.harmonics * 0.7f;
 
-  const float amplitude = 0.14f * (1.2f - (parameters.morph * 0.2f)) * (1.0f + spread * 0.2f);
+  const float amplitude = 0.14f * (1.2f - (shape * 0.2f)) * (1.0f + spread * 0.2f);
 
   fill(&out[0], &out[size], 0.0f);
   fill(&aux[0], &aux[size], 0.0f);
@@ -81,7 +81,7 @@ void SuperOscillatorEngine::Render(
     super_voice_[i].Render(
         f0,
         shape,
-        0.5f,
+        pw,
         spread,
         size,
         &phase_buffer_[i][rotatingIndex]
@@ -98,5 +98,5 @@ void SuperOscillatorEngine::Render(
   }
   rotatingIndex = rotatingIndex + size >= buffer_size_ ? 0 : rotatingIndex + size;
 }
-
+#pragma GCC reset_options
 }  // namespace plaits
