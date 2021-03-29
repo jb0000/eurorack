@@ -42,6 +42,7 @@ void SuperOscillatorEngine::Init(BufferAllocator* allocator) {
     float rank = (static_cast<float>(i) - 3.0) / 3.0;
     super_voice_[i].Init(rank);
   }
+  sub_oscillator_.Init();
   temp_buffer_ = allocator->Allocate<float>(kMaxBlockSize);
 }
 
@@ -57,7 +58,7 @@ void SuperOscillatorEngine::Render(
     bool* already_enveloped) {
 
   const float f0 = NoteToFrequency(parameters.note);
-
+  const float f_sub = NoteToFrequency(parameters.note - 12);
   float shape = parameters.morph;
   CONSTRAIN(shape, 0.0f, 1.0f);
 
@@ -84,6 +85,6 @@ void SuperOscillatorEngine::Render(
     }
   }
 
-}
-
+  sub_oscillator_.Render<OSCILLATOR_SHAPE_SQUARE>(f_sub, parameters.timbre * 0.4f + 0.5f, aux, size);
+  }
 }  // namespace plaits

@@ -31,6 +31,7 @@
 
 #include "plaits/dsp/engine/engine.h"
 #include "plaits/dsp/oscillator/variable_shape_oscillator.h"
+#include "plaits/dsp/oscillator/oscillator.h"
 
 namespace plaits {
   
@@ -81,6 +82,7 @@ class SuperOscillatorEngine : public Engine {
   
  private:
   SuperVoice super_voice_[7];
+  Oscillator sub_oscillator_;
   float* temp_buffer_;
   
   DISALLOW_COPY_AND_ASSIGN(SuperOscillatorEngine);
